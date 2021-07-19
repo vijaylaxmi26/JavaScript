@@ -92,6 +92,14 @@ const createUserName = accs => {
 
 createUserName(accounts);
 //console.log(accounts);
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, curr) => acc + curr, 0);
+  //console.log(`${balance}  `);
+  labelBalance.textContent = balance;
+};
+
+calcPrintBalance(movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -102,6 +110,6 @@ const currencies = new Map([
   ['GBP', 'Pound sterling'],
 ]);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+//const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
