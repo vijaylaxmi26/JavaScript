@@ -185,8 +185,27 @@ btnTransfer.addEventListener('click', function (event) {
     transferto.movements.push(amount);
     updateUI(currentAccount);
 
-    console.log('transfered sucssesfully');
+    //console.log('transfered sucssesfully');
   }
+});
+
+btnClose.addEventListener('click', function (event) {
+  event.preventDefault();
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    console.log('deleted sussesfully');
+    labelWelcome.textContent = 'Log in to get started';
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+
+  //hide ui
+  containerApp.style.opacity = 0;
 });
 
 /////////////////////////////////////////////////
