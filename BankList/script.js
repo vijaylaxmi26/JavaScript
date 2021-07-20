@@ -208,6 +208,19 @@ btnClose.addEventListener('click', function (event) {
   containerApp.style.opacity = 0;
 });
 
+btnLoan.addEventListener('click', function (event) {
+  event.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    //add amount
+    currentAccount.movements.push(amount);
+
+    //update ui
+    updateUI(currentAccount);
+  }
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
