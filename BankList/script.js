@@ -118,13 +118,26 @@ createUserName(accounts);
 //console.log(accounts);
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-const calcPrintBalance = function (movements) {
-  const balance = movements.reduce((acc, curr) => acc + curr, 0);
+const calcPrintBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, curr) => acc + curr, 0);
   //console.log(`${balance}  `);
-  labelBalance.textContent = `${balance} $ `;
+
+  labelBalance.textContent = `${acc.balance} $ `;
 };
 
 //calcPrintBalance(movements);
+
+//update ui
+const updateUI = function (acc) {
+  //display movements
+  displayMovements(currentAccount.movements);
+
+  //display balance
+  calcPrintBalance(currentAccount);
+
+  //display summary
+  calcDisplaySummary(currentAccount);
+};
 
 // event handler
 let currentAccount;
@@ -143,14 +156,8 @@ btnLogin.addEventListener('click', function (event) {
     }`;
     containerApp.style.opacity = 100;
 
-    //display movements
-    displayMovements(currentAccount.movements);
-
-    //display balance
-    calcPrintBalance(currentAccount.movements);
-
-    //display summary
-    calcDisplaySummary(currentAccount);
+    //required values
+    updateUI(currentAccount);
 
     //clear input field
     inputLoginUsername.value = inputLoginPin.value = '';
@@ -158,6 +165,28 @@ btnLogin.addEventListener('click', function (event) {
     inputLoginPin.blur();
   }
   //console.log(currentAccount);
+});
+
+btnTransfer.addEventListener('click', function (event) {
+  event.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const transferto = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+
+  inputTransferTo.value = inputTransferAmount.value = '';
+
+  if (
+    amount > 0 &&
+    currentAccount.balance >= amount &&
+    currentAccount.username !== transferto?.username
+  ) {
+    currentAccount.movements.push(-amount);
+    transferto.movements.push(amount);
+    updateUI(currentAccount);
+
+    console.log('transfered sucssesfully');
+  }
 });
 
 /////////////////////////////////////////////////
