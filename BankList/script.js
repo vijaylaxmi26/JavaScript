@@ -74,7 +74,7 @@ const displayMovements = function (movements, sort = false) {
       i + 1
     } ${type}</div>
      
-     <div class="movements__value">${mov} $</div>
+     <div class="movements__value">${mov.toFixed(2)} $</div>
     </div>`;
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -88,13 +88,13 @@ const calcDisplaySummary = function (acc) {
     .filter(mov => mov > 0)
     .reduce((acc, curr) => acc + curr, 0);
 
-  labelSumIn.textContent = incomes;
+  labelSumIn.textContent = `${incomes.toFixed(2)}$`;
 
   const outcomes = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, curr) => acc + curr, 0);
 
-  labelSumOut.textContent = Math.abs(outcomes);
+  labelSumOut.textContent = `${Math.abs(outcomes).toFixed(2)}$`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -102,7 +102,7 @@ const calcDisplaySummary = function (acc) {
     .reduce((acc, curr) => acc + curr)
     .toFixed(2);
 
-  labelSumInterest.textContent = interest;
+  labelSumInterest.textContent = `${interest}$`;
 };
 
 //calcDisplaySummary(account1.movements);
@@ -125,7 +125,7 @@ const calcPrintBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, curr) => acc + curr, 0);
   //console.log(`${balance}  `);
 
-  labelBalance.textContent = `${acc.balance} $ `;
+  labelBalance.textContent = `${acc.balance.toFixed(2)} $ `;
 };
 
 //calcPrintBalance(movements);
@@ -213,7 +213,7 @@ btnClose.addEventListener('click', function (event) {
 
 btnLoan.addEventListener('click', function (event) {
   event.preventDefault();
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     //add amount
