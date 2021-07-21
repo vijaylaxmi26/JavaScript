@@ -130,6 +130,17 @@ const formateMovementDate = function (date) {
   //`${day}/${month}/${year}`
   return new Intl.DateTimeFormat(currentAccount.locale).format(date);
 };
+
+//currency format
+const currency = (acc, value) => {
+  const options = {
+    style: 'currency',
+    currency: acc.currency,
+  };
+
+  return new Intl.NumberFormat(acc.locale, options).format(value);
+};
+
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
@@ -149,7 +160,7 @@ const displayMovements = function (acc, sort = false) {
       i + 1
     } ${type}</div>
     <div class="movements__date">${displayDate}</div>
-     <div class="movements__value">${mov.toFixed(2)} $</div>
+     <div class="movements__value">${currency(acc, mov.toFixed(2))} </div>
     </div>`;
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -163,13 +174,13 @@ const calcDisplaySummary = function (acc) {
     .filter(mov => mov > 0)
     .reduce((acc, curr) => acc + curr, 0);
 
-  labelSumIn.textContent = `${incomes.toFixed(2)}$`;
+  labelSumIn.textContent = `${currency(acc, incomes.toFixed(2))}`;
 
   const outcomes = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, curr) => acc + curr, 0);
 
-  labelSumOut.textContent = `${Math.abs(outcomes).toFixed(2)}$`;
+  labelSumOut.textContent = `${currency(acc, Math.abs(outcomes).toFixed(2))}`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -177,7 +188,7 @@ const calcDisplaySummary = function (acc) {
     .reduce((acc, curr) => acc + curr)
     .toFixed(2);
 
-  labelSumInterest.textContent = `${interest}$`;
+  labelSumInterest.textContent = `${currency(acc, interest)}`;
 };
 
 //calcDisplaySummary(account1.movements);
@@ -200,7 +211,7 @@ const calcPrintBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, curr) => acc + curr, 0);
   //console.log(`${balance}  `);
 
-  labelBalance.textContent = `${acc.balance.toFixed(2)} $ `;
+  labelBalance.textContent = `${currency(acc, acc.balance.toFixed(2))} $ `;
 };
 
 //calcPrintBalance(movements);
