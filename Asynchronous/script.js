@@ -5,10 +5,34 @@ const countriesContainer = document.querySelector('.countries');
 
 ///////////////////////////////////////
 
+const renderdata = function (data, className = '') {
+  const html = `
+        <article class="country ${className}" >
+        <img class="country__img" src=${data.flag} />
+        <div class="country__data">
+          <h3 class="country__name">${data.name}</h3>
+          <h4 class="country__region">${data.region}</h4>
+          <p class="country__row"><span>👫</span>${
+            +data.population >= 1000000
+              ? (+data.population / 1000000).toFixed(1)
+              : data.population
+          } people </p>
+          <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+          <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+        </div>
+      </article>`;
+
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+};
+
 const getCountryData = function (country) {
   const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.eu/rest/v2/all`);
-  //   request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+  if (country === 'all') {
+    request.open('GET', `https://restcountries.eu/rest/v2/all`);
+  } else {
+    request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+  }
+
   request.send();
 
   request.addEventListener('load', function () {
@@ -19,26 +43,51 @@ const getCountryData = function (country) {
     countriesContainer.style.opacity = 1;
 
     datas.forEach(data => {
-      const html = `
-    <article class="country">
-    <img class="country__img" src=${data.flag} />
-    <div class="country__data">
-      <h3 class="country__name">${data.name}</h3>
-      <h4 class="country__region">${data.region}</h4>
-      <p class="country__row"><span>👫</span>${
-        +data.population >= 1000000
-          ? (+data.population / 1000000).toFixed(1)
-          : data.population
-      } people </p>
-      <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
-      <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
-    </div>
-  </article>`;
-
-      countriesContainer.insertAdjacentHTML('beforeend', html);
+      renderdata(data);
     });
   });
 };
 
-getCountryData('india');
-getCountryData('usa');
+// getCountryData('india');
+// getCountryData('usa');
+
+// getCountryData('all');
+
+const getCountryNeighbour = function (country) {
+  const request = new XMLHttpRequest();
+
+  request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    //   console.log(this.responseText);
+    const datas = JSON.parse(this.responseText);
+    //console.log(data);
+
+    countriesContainer.style.opacity = 1;
+
+    datas.forEach(data => {
+      renderdata(data);
+
+      const neighbours = data.borders;
+
+      if (!neighbours) return;
+
+      neighbours.forEach(neighbour => {
+        const nrighbourrequest = new XMLHttpRequest();
+        nrighbourrequest.open(
+          'GET',
+          ` https://restcountries.eu/rest/v2/alpha/${neighbour}`
+        );
+        nrighbourrequest.send();
+
+        nrighbourrequest.addEventListener('load', function () {
+          const Ndata = JSON.parse(this.responseText);
+          renderdata(Ndata, 'neighbour');
+        });
+      });
+    });
+  });
+};
+
+getCountryNeighbour('india');
