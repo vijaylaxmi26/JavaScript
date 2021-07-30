@@ -116,7 +116,17 @@ const renderdata = function (data, className = '') {
 const getCountryData = function (country) {
   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
     .then(response => response.json())
-    .then(data => data.forEach(element => renderdata(element)));
+    .then(data => {
+      renderdata(data[0]);
+      console.log(data[0]);
+      const neighbour = data[0].borders[0];
+
+      if (!neighbour) return;
+
+      return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+    })
+    ?.then(response => response.json())
+    .then(data => renderdata(data, 'neighbour'));
 };
 
-getCountryData('india');
+getCountryData('usa');
