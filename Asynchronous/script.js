@@ -23,6 +23,8 @@ const renderdata = function (data, className = '') {
         </div>
       </article>`;
 
+  countriesContainer.style.opacity = 1;
+
   countriesContainer.insertAdjacentHTML('beforeend', html);
 };
 
@@ -207,3 +209,107 @@ btn.addEventListener('click', function () {
 //   .then(() => {
 //     console.log('I waited for 1 second');
 //   });
+
+//promisifying the geolocation
+
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //   position => resolve(position),
+//     //   err => reject(err)
+//     // );
+
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
+
+// getPosition()
+//   .then(position => console.log(position))
+//   .catch(err => console.error(err));
+
+//cosuming promisess with async/await
+
+// const whereAmI = async function (country) {
+//   //geolocation
+//   // const pos = await getPosition();
+
+//   // fetch(`https://restcountries.eu/rest/v2/name/${country}`).then(res => console.log(res));
+
+//   const res = await fetch(`https://restcountries.eu/rest/v2/name/${country}`);
+//   const data = await res.json();
+//   console.log(data);
+//   renderdata(data[0]);
+// };
+
+// whereAmI('usa');
+// console.log('sdfidj');
+
+//////////////////////////////////////
+//Runing promises in parallel
+
+// const get3Countries = async function (c1, c2, c3) {
+//   try {
+//     // const [data1] = await getJSON(
+//     //   `https://restcountries.eu/rest/v2/name/${c1}`
+//     // );
+
+//     // const [data2] = await getJSON(
+//     //   `https://restcountries.eu/rest/v2/name/${c2}`
+//     // );
+
+//     // const [data3] = await getJSON(
+//     //   `https://restcountries.eu/rest/v2/name/${c3}`
+//     // );
+
+//     const data = await Promise.all([
+// getJSON(`https://restcountries.eu/rest/v2/name/${c1}`),
+// getJSON(`https://restcountries.eu/rest/v2/name/${c2}`),
+// getJSON(`https://restcountries.eu/rest/v2/name/${c3}`),
+//     ]);
+
+//     console.log(data);
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// };
+
+// get3Countries('india', 'portugal', 'canada');
+
+//promises.race
+// (async function () {
+//   const res = await Promise.race([
+//     getJSON(`https://restcountries.eu/rest/v2/name/usa`),
+//     getJSON(`https://restcountries.eu/rest/v2/name/portugal`),
+//     getJSON(`https://restcountries.eu/rest/v2/name/canada`),
+//   ]);
+
+//   console.log(res);
+//   console.log(res[0]);
+// })();
+
+// const timeout = function (sec) {
+//   return new Promise(function (_, reject) {
+//     setTimeout(function () {
+//       reject(new Error('Request took too long'));
+//     }, sec * 1000);
+//   });
+// };
+
+// Promise.race([
+//   getJSON(`https://restcountries.eu/rest/v2/name/canada`),
+//   timeout(0.05),
+// ])
+//   .then(res => console.log(res[0]))
+//   .catch(err => console.error(err));
+
+// Promise.allSettled([
+//   Promise.resolve('Success'),
+//   Promise.reject('Error'),
+//   Promise.resolve('Another Success'),
+// ]).then(res => console.log(res));
+
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Another Success'),
+]).then(res => console.log(res));
