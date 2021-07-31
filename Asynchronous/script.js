@@ -179,3 +179,31 @@ btn.addEventListener('click', function () {
 });
 
 // getCountryData('dsfegftrh');
+
+//building a new promisses
+
+// const lotteryPromise = new Promise(function (resolve, reject) {
+//   setTimeout(function () {
+//     if (Math.random() >= 0.5) resolve('You win');
+//     else reject(new Error('You lost'));
+//   }, 2000);
+// });
+
+// lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+//promisifying setTimeout
+
+// const wait = function (seconds) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
+
+// wait(2)
+//   .then(() => {
+//     console.log('I waited for 2 second');
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log('I waited for 1 second');
+//   });
