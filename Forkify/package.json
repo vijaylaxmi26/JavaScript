@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "add-gitignore": "^1.1.1",
-    "gitignore": "^0.7.0"
+    "core-js": "^3.16.0",
+    "gitignore": "^0.7.0",
+    "regenerator-runtime": "^0.13.9"
   }
 }
